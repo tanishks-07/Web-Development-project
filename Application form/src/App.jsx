@@ -11,19 +11,25 @@ function App() {
     address: "",
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    setSubmitted(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    alert("Application Submitted!");
+    console.log("Form Data:", formData);
 
-    console.log(formData);
+    setSubmitted(true);
 
     setFormData({
       name: "",
@@ -36,82 +42,200 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Application Form</h1>
+    <div className="page">
+      <div className="form-card">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Full Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+        {/* Header */}
+        <div className="form-header">
+          <div className="logo">AF</div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
-
-        <div className="radio">
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="Male"
-              checked={formData.gender === "Male"}
-              onChange={handleChange}
-            />
-            Male
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="Female"
-              checked={formData.gender === "Female"}
-              onChange={handleChange}
-            />
-            Female
-          </label>
+          <div>
+            <h1>Application Form</h1>
+            <p>Fill in your details to submit your application</p>
+          </div>
         </div>
 
-        <select
-          name="course"
-          value={formData.course}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Course</option>
-          <option value="B.Tech">B.Tech</option>
-          <option value="BCA">BCA</option>
-          <option value="MCA">MCA</option>
-        </select>
+        {/* Success Message */}
+        {submitted && (
+          <div className="success-message">
+            ✓ Application submitted successfully!
+          </div>
+        )}
 
-        <textarea
-          placeholder="Address"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit}>
 
-        <button type="submit">Submit</button>
-      </form>
+          {/* Personal Information */}
+          <div className="section-title">
+            <span>01</span>
+            Personal Information
+          </div>
+
+          <div className="form-grid">
+
+            <div className="form-group">
+              <label htmlFor="name">
+                Full Name <span>*</span>
+              </label>
+
+              <input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">
+                Email Address <span>*</span>
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="example@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+          </div>
+
+          <div className="form-grid">
+
+            <div className="form-group">
+              <label htmlFor="phone">
+                Phone Number <span>*</span>
+              </label>
+
+              <input
+                id="phone"
+                type="tel"
+                name="phone"
+                placeholder="10 digit mobile number"
+                value={formData.phone}
+                onChange={handleChange}
+                pattern="[0-9]{10}"
+                maxLength="10"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>
+                Gender <span>*</span>
+              </label>
+
+              <div className="gender-options">
+
+                <label className="gender-option">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="Male"
+                    checked={formData.gender === "Male"}
+                    onChange={handleChange}
+                    required
+                  />
+                  <span>Male</span>
+                </label>
+
+                <label className="gender-option">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="Female"
+                    checked={formData.gender === "Female"}
+                    onChange={handleChange}
+                  />
+                  <span>Female</span>
+                </label>
+
+                <label className="gender-option">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="Other"
+                    checked={formData.gender === "Other"}
+                    onChange={handleChange}
+                  />
+                  <span>Other</span>
+                </label>
+
+              </div>
+            </div>
+
+          </div>
+
+          {/* Course Information */}
+          <div className="section-title">
+            <span>02</span>
+            Course Information
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="course">
+              Select Course <span>*</span>
+            </label>
+
+            <select
+              id="course"
+              name="course"
+              value={formData.course}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Choose your course</option>
+              <option value="B.Tech">B.Tech</option>
+              <option value="BCA">BCA</option>
+              <option value="MCA">MCA</option>
+              <option value="BBA">BBA</option>
+
+            </select>
+          </div>
+
+          {/* Address */}
+          <div className="section-title">
+            <span>03</span>
+            Contact Information
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="address">
+              Address
+            </label>
+
+            <textarea
+              id="address"
+              name="address"
+              placeholder="Enter your complete address"
+              value={formData.address}
+              onChange={handleChange}
+              maxLength="200"
+            />
+
+            <div className="character-count">
+              {formData.address.length}/200
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button type="submit" className="submit-btn">
+            Submit Application
+            <span>→</span>
+          </button>
+
+          <p className="required-text">
+            * Required fields
+          </p>
+
+        </form>
+      </div>
     </div>
   );
 }
